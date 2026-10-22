@@ -1,0 +1,19 @@
+{#
+    Outils pour afficher les erreurs de validation dans les formulaires.
+    Utilisation :
+        {% import 'partials/formulaire.php.twig' as champ %}
+        <input ... {{ champ.attributs(erreurs, 'titre') }}>
+        {{ champ.erreur(erreurs, 'titre') }}
+#}
+
+{# Message d'erreur sous un champ, s'il y en a un #}
+{% macro erreur(erreurs, nom) %}
+    {% if erreurs[nom] is defined %}
+        <p class="erreur-champ" id="erreur-{{ nom }}">{{ erreurs[nom] }}</p>
+    {% endif %}
+{% endmacro %}
+
+{# Attributs d'accessibilité pour un champ en erreur #}
+{% macro attributs(erreurs, nom) %}
+    {%- if erreurs[nom] is defined %} aria-invalid="true" aria-describedby="erreur-{{ nom }}"{% endif -%}
+{% endmacro %}

@@ -1,0 +1,6 @@
+# Fichier de configuration avec le vrai mot de passe : jamais publié
+config/config.php
+
+# Rapport Word (remis seulement dans le ZIP)
+*.docx
+~$*.docx

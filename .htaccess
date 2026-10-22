@@ -1,0 +1,10 @@
+# Toutes les adresses qui ne correspondent pas à un vrai fichier
+# (CSS, JS, image) sont envoyées à index.php, qui choisit la route.
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+# Le dossier des fichiers internes ne doit jamais être accessible
+RedirectMatch 404 /(config|vendor|views|Models|Controllers|Providers|Routes)/

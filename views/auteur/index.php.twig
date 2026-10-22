@@ -1,0 +1,61 @@
+{#
+    Liste des auteurs, avec le nombre de livres de chacun.
+#}
+{% extends 'layout.php.twig' %}
+
+{% block titre %}Auteurs{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>Auteurs</h1>
+        <a class="bouton" href="{{ base }}/auteur/create">Ajouter un auteur</a>
+    </div>
+
+    {% if auteurs is empty %}
+        <div class="vide">
+            <p>Aucun auteur pour l'instant.</p>
+            <a class="bouton" href="{{ base }}/auteur/create">Ajouter un auteur</a>
+        </div>
+    {% else %}
+        <div class="tableau-conteneur">
+            <table class="tableau">
+                <thead>
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col" class="nombre">Naissance</th>
+                        <th scope="col" class="nombre">Livres</th>
+                        <th scope="col"><span class="visuellement-cache">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for auteur in auteurs %}
+                                                <tr>
+                            <td>
+                                <strong>{{ auteur.nom }}</strong>, {{ auteur.prenom }}
+                                {% if auteur.biographie is not null %}
+                                    <span class="tableau__note">{{ auteur.biographie }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="nombre">{{ auteur.annee_naissance }}</td>
+                            <td class="nombre">
+                                {% if auteur.nombre_livres > 0 %}
+                                    <a href="{{ base }}/livres?auteur={{ auteur.id }}">{{ auteur.nombre_livres }}</a>
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </td>
+                            <td class="actions">
+                                <a href="{{ base }}/auteur/edit?id={{ auteur.id }}">Modifier</a>
+                                {% include 'partials/supprimer.php.twig' with {
+                                    action: '/auteur/delete',
+                                    id: auteur.id,
+                                    confirmation: 'Supprimer ' ~ auteur.prenom ~ ' ' ~ auteur.nom ~ '?'
+                                } %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

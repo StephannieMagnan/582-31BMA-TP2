@@ -1,0 +1,59 @@
+{#
+    Liste des catégories, avec le nombre de livres de chacune.
+#}
+{% extends 'layout.php.twig' %}
+
+{% block titre %}Catégories{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>Catégories</h1>
+        <a class="bouton" href="{{ base }}/categorie/create">Ajouter une catégorie</a>
+    </div>
+
+    {% if categories is empty %}
+        <div class="vide">
+            <p>Aucune catégorie pour l'instant.</p>
+            <a class="bouton" href="{{ base }}/categorie/create">Ajouter une catégorie</a>
+        </div>
+    {% else %}
+        <div class="tableau-conteneur">
+            <table class="tableau">
+                <thead>
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col" class="nombre">Livres</th>
+                        <th scope="col"><span class="visuellement-cache">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categorie in categories %}
+                                                <tr>
+                            <td>
+                                <strong>{{ categorie.nom }}</strong>
+                                {% if categorie.description is not null %}
+                                    <span class="tableau__note">{{ categorie.description }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="nombre">
+                                {% if categorie.nombre_livres > 0 %}
+                                    <a href="{{ base }}/livres?categorie={{ categorie.id }}">{{ categorie.nombre_livres }}</a>
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </td>
+                            <td class="actions">
+                                <a href="{{ base }}/categorie/edit?id={{ categorie.id }}">Modifier</a>
+                                {% include 'partials/supprimer.php.twig' with {
+                                    action: '/categorie/delete',
+                                    id: categorie.id,
+                                    confirmation: 'Supprimer la catégorie ' ~ categorie.nom ~ '? Les livres resteront au catalogue.'
+                                } %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

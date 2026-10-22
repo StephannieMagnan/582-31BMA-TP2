@@ -1,0 +1,60 @@
+{#
+    Formulaire d'ajout (auteur/store) et de modification (auteur/update) d'un auteur.
+#}
+{% extends 'layout.php.twig' %}
+{% import 'partials/formulaire.php.twig' as champ %}
+
+{% set estAjout = auteur.id is empty %}
+
+{% block titre %}{{ estAjout ? 'Ajouter un auteur' : 'Modifier ' ~ auteur.prenom ~ ' ' ~ auteur.nom }}{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>{{ estAjout ? 'Ajouter un auteur' : 'Modifier l\'auteur' }}</h1>
+    </div>
+
+    {% if erreurs is not empty %}
+        <p class="message message--erreur" role="alert">L'auteur n'a pas été enregistré. Corrigez les champs indiqués.</p>
+    {% endif %}
+
+    <form class="formulaire formulaire--etroit" method="post" action="{{ base }}/auteur/{{ estAjout ? 'store' : 'update' }}" novalidate>
+        <input type="hidden" name="jeton_csrf" value="{{ jeton_csrf }}">
+        {% if not estAjout %}
+            <input type="hidden" name="id" value="{{ auteur.id }}">
+        {% endif %}
+
+        <div class="rangee">
+            <div class="champ">
+                <label for="prenom">Prénom</label>
+                <input type="text" id="prenom" name="prenom" maxlength="80" required
+                       value="{{ auteur.prenom }}"{{ champ.attributs(erreurs, 'prenom') }}>
+                {{ champ.erreur(erreurs, 'prenom') }}
+            </div>
+
+            <div class="champ">
+                <label for="nom">Nom</label>
+                <input type="text" id="nom" name="nom" maxlength="80" required
+                       value="{{ auteur.nom }}"{{ champ.attributs(erreurs, 'nom') }}>
+                {{ champ.erreur(erreurs, 'nom') }}
+            </div>
+        </div>
+
+        <div class="champ champ--court">
+            <label for="annee_naissance">Année de naissance <span class="facultatif">(facultatif)</span></label>
+            <input type="number" id="annee_naissance" name="annee_naissance" min="1000" max="{{ anneeMax }}"
+                   value="{{ auteur.annee_naissance }}"{{ champ.attributs(erreurs, 'annee_naissance') }}>
+            {{ champ.erreur(erreurs, 'annee_naissance') }}
+        </div>
+
+        <div class="champ">
+            <label for="biographie">Biographie <span class="facultatif">(facultatif)</span></label>
+            <textarea id="biographie" name="biographie" rows="4" maxlength="2000"{{ champ.attributs(erreurs, 'biographie') }}>{{ auteur.biographie }}</textarea>
+            {{ champ.erreur(erreurs, 'biographie') }}
+        </div>
+
+        <div class="formulaire__actions">
+            <button type="submit" class="bouton">{{ estAjout ? 'Ajouter l\'auteur' : 'Enregistrer les modifications' }}</button>
+            <a href="{{ base }}/auteurs">Annuler</a>
+        </div>
+    </form>
+{% endblock %}

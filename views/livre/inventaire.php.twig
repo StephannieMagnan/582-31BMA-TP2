@@ -1,0 +1,84 @@
+{#
+    Inventaire : statistiques calculées dans la base, derniers livres
+    ajoutés et livres à réapprovisionner.
+#}
+{% extends 'layout.php.twig' %}
+{% import 'partials/couverture.php.twig' as illustration %}
+
+{% block titre %}Inventaire{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>Inventaire</h1>
+    </div>
+
+    <dl class="statistiques">
+        <div>
+            <dt>Titres au catalogue</dt>
+            <dd>{{ nombreLivres }}</dd>
+        </div>
+        <div>
+            <dt>Exemplaires en stock</dt>
+            <dd>{{ nombreExemplaires }}</dd>
+        </div>
+        <div>
+            <dt>Auteurs</dt>
+            <dd>{{ nombreAuteurs }}</dd>
+        </div>
+        <div>
+            <dt>Valeur des rayons</dt>
+            <dd>{{ valeurInventaire|prix }}</dd>
+        </div>
+    </dl>
+
+    <section class="section">
+        <h2>À réapprovisionner</h2>
+
+        {% if livresStockFaible is empty %}
+            <p class="texte-discret">Tous les livres ont plus de {{ seuil_stock }} exemplaires en stock.</p>
+        {% else %}
+            <div class="tableau-conteneur">
+                <table class="tableau">
+                    <thead>
+                        <tr>
+                            <th scope="col">Titre</th>
+                            <th scope="col">Auteur</th>
+                            <th scope="col" class="nombre">En stock</th>
+                            <th scope="col"><span class="visuellement-cache">Actions</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for livre in livresStockFaible %}
+                            <tr>
+                                <td><a href="{{ base }}/livre/show?id={{ livre.id }}">{{ livre.titre }}</a></td>
+                                <td>{{ livre.auteur_nom }}</td>
+                                <td class="nombre">
+                                    <span class="pastille {{ livre.quantite_stock == 0 ? 'pastille--rupture' : 'pastille--faible' }}">
+                                        {{ livre.quantite_stock }}
+                                    </span>
+                                </td>
+                                <td class="actions"><a href="{{ base }}/livre/edit?id={{ livre.id }}">Modifier le stock</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </section>
+
+    {% if livresRecents is not empty %}
+        <section class="section">
+            <h2>Derniers arrivages</h2>
+            <ul class="tablette tablette--inventaire">
+                {% for livre in livresRecents %}
+                    <li>
+                        <a href="{{ base }}/livre/show?id={{ livre.id }}" title="{{ livre.titre }}">
+                            {{ illustration.couverture(livre) }}
+                            <span class="visuellement-cache">{{ livre.titre }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+{% endblock %}

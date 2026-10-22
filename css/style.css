@@ -1,0 +1,972 @@
+/* ============================================================
+   Thème sombre inspiré des grimoires
+   ============================================================ */
+
+/* ---------- Variables ---------- */
+
+:root {
+    color-scheme: dark;
+
+    /* Couleurs */
+    --nuit: #0E0B10;            /* fond de page */
+    --ombre: #18131B;           /* panneaux, tableaux, formulaires */
+    --ombre-claire: #221A25;    /* survol */
+    --bordure: #362B39;
+    --parchemin: #EDE4D8;       /* texte principal */
+    --cendre: #A39A9F;          /* texte secondaire */
+    --sang: #9E1B2A;            /* boutons, accent principal */
+    --sang-vif: #C0283A;
+    --sang-sombre: #3A1117;
+    --dorure: #CBA35C;          /* liens, focus, menu actif */
+    --dorure-sombre: #3B2F17;
+
+    /* Typographie */
+    --police-titre: "Cinzel", "Trajan Pro", Georgia, serif;
+    --police-texte: "Karla", "Helvetica Neue", Arial, sans-serif;
+
+    /* Espacements */
+    --largeur-max: 1120px;
+    --rayon: 4px;
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(ellipse 80% 45% at 50% 0%, rgba(158, 27, 42, 0.18), transparent 70%),
+        var(--nuit);
+    color: var(--parchemin);
+    font-family: var(--police-texte);
+    font-size: 1.0625rem;
+    line-height: 1.55;
+}
+
+h1,
+h2 {
+    font-family: var(--police-titre);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: 0.03em;
+    margin: 0 0 0.5em;
+}
+
+h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+}
+
+h2 {
+    font-size: 1.4rem;
+}
+
+a {
+    color: var(--dorure);
+    text-underline-offset: 0.2em;
+}
+
+a:hover {
+    color: #E3C489;
+}
+
+:focus-visible {
+    outline: 2px solid var(--dorure);
+    outline-offset: 2px;
+}
+
+code {
+    font-size: 0.9em;
+}
+
+.texte-discret {
+    color: var(--cendre);
+}
+
+.visuellement-cache {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* ---------- En-tête et pied de page ---------- */
+
+.entete {
+    border-bottom: 1px solid var(--dorure-sombre);
+    background: rgba(14, 11, 16, 0.85);
+}
+
+.entete__interieur {
+    max-width: var(--largeur-max);
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--parchemin);
+    font-family: var(--police-titre);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.logo:hover {
+    color: var(--parchemin);
+}
+
+/* Sigle de Nemesis */
+.logo__sigle {
+    width: 1.9rem;
+    height: 1.9rem;
+    fill: none;
+    stroke: var(--dorure);
+    stroke-width: 1.4;
+}
+
+.logo__oeil {
+    fill: var(--sang-vif);
+    stroke: none;
+}
+
+.menu {
+    flex: 1;
+}
+
+.menu ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.menu a {
+    display: block;
+    padding: 0.35rem 0;
+    color: var(--cendre);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+}
+
+.menu a:hover {
+    color: var(--parchemin);
+}
+
+.menu a[aria-current="page"] {
+    color: var(--parchemin);
+    border-bottom-color: var(--sang-vif);
+}
+
+.contenu {
+    flex: 1;
+    width: 100%;
+    max-width: var(--largeur-max);
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+}
+
+.pied {
+    border-top: 1px solid var(--bordure);
+    color: var(--cendre);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.pied p {
+    margin: 0;
+}
+
+/* ---------- Éléments communs ---------- */
+
+.bouton {
+    display: inline-block;
+    padding: 0.65rem 1.2rem;
+    border: 1px solid var(--sang-vif);
+    border-radius: var(--rayon);
+    background: var(--sang);
+    color: var(--parchemin);
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.bouton:hover {
+    background: var(--sang-vif);
+    color: #FFFFFF;
+}
+
+/* Bouton secondaire  */
+.bouton--clair {
+    border-color: var(--dorure);
+    background: transparent;
+    color: var(--dorure);
+    white-space: nowrap;
+}
+
+.bouton--clair:hover {
+    background: var(--dorure);
+    color: var(--nuit);
+}
+
+/* Bouton */
+.bouton-lien {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+}
+
+.bouton-lien--danger {
+    color: #E0707C;
+}
+
+.form-suppression {
+    display: inline;
+}
+
+.message {
+    margin: 0 0 1.5rem;
+    padding: 0.85rem 1.1rem;
+    border-left: 3px solid;
+    border-radius: 0 var(--rayon) var(--rayon) 0;
+    background: var(--ombre);
+}
+
+.message--succes {
+    border-color: var(--dorure);
+}
+
+.message--erreur {
+    border-color: var(--sang-vif);
+    background: var(--sang-sombre);
+}
+
+.pastille {
+    display: inline-block;
+    padding: 0.05rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+.pastille--faible {
+    background: var(--dorure-sombre);
+    color: #E3C489;
+}
+
+.pastille--rupture {
+    background: var(--sang-sombre);
+    color: #F08A95;
+}
+
+.en-tete-page {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.en-tete-page h1,
+.en-tete-page p {
+    margin: 0;
+}
+
+.section {
+    margin-top: 3.5rem;
+}
+
+.vide {
+    padding: 2.5rem 1.5rem;
+    border: 1px dashed var(--bordure);
+    border-radius: var(--rayon);
+    text-align: center;
+}
+
+.vide p {
+    margin-top: 0;
+}
+
+.detail-erreur {
+    max-width: 60ch;
+    margin: 1rem auto;
+    padding: 1rem;
+    overflow-x: auto;
+    background: var(--ombre);
+    text-align: left;
+    white-space: pre-wrap;
+}
+
+.fil {
+    margin: 0 0 1.5rem;
+    color: var(--cendre);
+    font-size: 0.95rem;
+}
+
+/* ---------- Couverture de livre ---------- */
+
+.couverture {
+    container-type: inline-size;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    aspect-ratio: 2 / 3;
+    padding: 18% 14% 15% 19%;
+    border-radius: 2px 5px 5px 2px;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.08), transparent 60%),
+        var(--couleur, var(--sang));
+    color: var(--couleur-texte, #E3C489);
+    text-align: center;
+    box-shadow:
+        inset 8px 0 0 rgba(0, 0, 0, 0.35),
+        inset 9px 0 0 rgba(255, 255, 255, 0.08),
+        0 2px 3px rgba(0, 0, 0, 0.6),
+        0 14px 24px -12px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+}
+
+/* Cadre doré intérieur */
+.couverture::before {
+    content: "";
+    position: absolute;
+    inset: 6% 7% 6% 11%;
+    border: 1px solid currentColor;
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+/* Petit ornement entre le titre et l'auteur */
+.couverture::after {
+    content: "✦";
+    position: absolute;
+    left: 55%;
+    top: 62%;
+    transform: translateX(-50%);
+    font-size: 9cqi;
+    opacity: 0.6;
+}
+
+.couverture__titre {
+    font-family: var(--police-titre);
+    font-size: 1rem;
+    font-size: 12cqi;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.couverture__auteur {
+    font-size: 0.75rem;
+    font-size: 7cqi;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.couverture--grande {
+    width: 100%;
+    max-width: 320px;
+}
+
+/* ---------- Accueil ---------- */
+
+.vitrine {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 3rem;
+    align-items: end;
+}
+
+.vitrine__surtitre {
+    margin: 0 0 0.25rem;
+    color: var(--sang-vif);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.vitrine__texte h1 {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 40px rgba(192, 40, 58, 0.35);
+}
+
+.vitrine__texte p {
+    max-width: 40ch;
+}
+
+.vitrine__chiffres {
+    color: var(--cendre);
+}
+
+.tablette {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.6rem;
+    align-items: end;
+    margin: 0;
+    padding: 0 0.75rem;
+    list-style: none;
+    border-bottom: 12px solid #2A1B12;
+    box-shadow:
+        0 1px 0 var(--dorure-sombre),
+        0 14px 18px -10px rgba(0, 0, 0, 0.9);
+}
+
+.tablette a {
+    display: block;
+    text-decoration: none;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.tablette a:hover,
+.tablette a:focus-visible {
+    transform: translateY(-8px);
+    filter: drop-shadow(0 0 10px rgba(192, 40, 58, 0.45));
+}
+
+.tablette li:nth-child(odd) .couverture {
+    transform: scale(0.94);
+    transform-origin: bottom;
+}
+
+/* ---------- Catalogue ---------- */
+
+.filtres {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 1rem;
+    align-items: end;
+    margin-bottom: 2.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    background: var(--ombre);
+}
+
+.filtres .champ {
+    margin: 0;
+}
+
+.filtres__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    white-space: nowrap;
+}
+
+.rayon {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 2.5rem 1.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.rayon__livre > a {
+    display: block;
+    text-decoration: none;
+    transition: filter 0.2s ease;
+}
+
+.rayon__livre > a:hover {
+    filter: drop-shadow(0 0 12px rgba(192, 40, 58, 0.4));
+}
+
+.rayon__infos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin-top: 0.85rem;
+    font-size: 0.95rem;
+}
+
+.rayon__titre {
+    color: var(--parchemin);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rayon__titre:hover {
+    color: var(--parchemin);
+    text-decoration: underline;
+}
+
+.rayon__prix {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* ---------- Fiche d'un livre ---------- */
+
+.fiche {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 3.5rem;
+    align-items: start;
+}
+
+.fiche__details {
+    max-width: 62ch;
+}
+
+.fiche__details h1 {
+    margin-bottom: 0.2em;
+}
+
+.fiche__auteur {
+    margin: 0 0 1.25rem;
+    font-size: 1.2rem;
+}
+
+.fiche__resume {
+    font-size: 1.15rem;
+}
+
+.fiche__donnees {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 2rem;
+    margin: 2rem 0;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--bordure);
+    border-bottom: 1px solid var(--bordure);
+}
+
+.fiche__donnees dt {
+    color: var(--cendre);
+    font-size: 0.9rem;
+}
+
+.fiche__donnees dd {
+    margin: 0;
+    font-weight: 500;
+}
+
+.fiche__bio h2 {
+    font-size: 1.1rem;
+}
+
+.fiche__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.etiquettes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+}
+
+.etiquettes a {
+    display: block;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid var(--dorure-sombre);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.etiquettes a:hover {
+    border-color: var(--dorure);
+    background: var(--dorure);
+    color: var(--nuit);
+}
+
+/* ---------- Tableaux ---------- */
+
+.tableau-conteneur {
+    overflow-x: auto;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    background: var(--ombre);
+}
+
+.tableau {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableau th,
+.tableau td {
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--bordure);
+    text-align: left;
+    vertical-align: top;
+}
+
+.tableau th {
+    color: var(--cendre);
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.tableau tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.tableau tbody tr:hover {
+    background: var(--ombre-claire);
+}
+
+.tableau .nombre {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.tableau .actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.tableau .actions > * + * {
+    margin-left: 1rem;
+}
+
+.tableau__note {
+    display: block;
+    max-width: 60ch;
+    color: var(--cendre);
+    font-size: 0.9rem;
+}
+
+/* ---------- Formulaires ---------- */
+
+.mise-en-page-formulaire {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 3rem;
+    align-items: start;
+}
+
+.formulaire {
+    padding: 2rem;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    background: var(--ombre);
+}
+
+.formulaire--etroit {
+    max-width: 640px;
+}
+
+.champ {
+    margin: 0 0 1.25rem;
+    padding: 0;
+    border: 0;
+}
+
+.champ label,
+.champ legend {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 700;
+}
+
+.facultatif {
+    color: var(--cendre);
+    font-weight: 400;
+}
+
+.champ input:not([type="checkbox"], [type="color"]),
+.champ select,
+.champ textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    background: var(--nuit);
+    color: var(--parchemin);
+    font: inherit;
+}
+
+.champ input:not([type="checkbox"], [type="color"]),
+.champ select {
+    height: 2.75rem;
+}
+
+.champ textarea {
+    resize: vertical;
+}
+
+.champ input:focus,
+.champ select:focus,
+.champ textarea:focus {
+    border-color: var(--dorure);
+}
+
+.champ [aria-invalid="true"] {
+    border-color: var(--sang-vif);
+    box-shadow: 0 0 0 1px var(--sang-vif);
+}
+
+.champ--court {
+    max-width: 14rem;
+}
+
+.champ--couleur input {
+    width: 4rem;
+    height: 2.5rem;
+    padding: 0.2rem;
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+    background: var(--nuit);
+    cursor: pointer;
+}
+
+.erreur-champ {
+    margin: 0.35rem 0 0;
+    color: #F08A95;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.rangee {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1.25rem;
+}
+
+.rangee--trois {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.cases {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.champ .case {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--bordure);
+    border-radius: 999px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.champ .case:has(input:checked) {
+    border-color: var(--sang-vif);
+    background: var(--sang-sombre);
+}
+
+.case input {
+    accent-color: var(--sang-vif);
+}
+
+.formulaire__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.apercu {
+    position: sticky;
+    top: 1.5rem;
+    text-align: center;
+}
+
+.apercu p {
+    font-size: 0.9rem;
+}
+
+/* ---------- Petits écrans ---------- */
+
+@media (max-width: 900px) {
+    .entete__interieur {
+        flex-wrap: wrap;
+        gap: 0.75rem 1.5rem;
+    }
+
+    .menu {
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    .vitrine,
+    .fiche,
+    .mise-en-page-formulaire {
+        grid-template-columns: 1fr;
+    }
+
+    .tablette {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .tablette li:nth-child(n + 4) {
+        display: none;
+    }
+
+    .fiche .couverture--grande,
+    .apercu {
+        max-width: 220px;
+    }
+
+    .apercu {
+        position: static;
+        order: -1;
+    }
+
+    .filtres {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filtres .champ:first-child {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 560px) {
+    .contenu {
+        padding: 1.75rem 1rem 3rem;
+    }
+
+    .bouton--clair {
+        margin-left: auto;
+    }
+
+    .filtres,
+    .rangee,
+    .rangee--trois,
+    .fiche__donnees {
+        grid-template-columns: 1fr;
+    }
+
+    .rayon {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2rem 1rem;
+    }
+
+    .formulaire {
+        padding: 1.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tablette a,
+    .rayon__livre > a {
+        transition: none;
+    }
+}
+
+/* ---------- Accueil ---------- */
+
+.portes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.portes li {
+    padding: 1.25rem 1.4rem;
+    background: var(--ombre);
+    border: 1px solid var(--bordure);
+    border-top: 3px solid var(--sang);
+    border-radius: var(--rayon);
+}
+
+.portes h3 {
+    margin: 0 0 0.4rem;
+    font-family: var(--police-titre);
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+}
+
+.portes p {
+    margin: 0;
+    color: var(--cendre);
+    font-size: 0.95rem;
+}
+
+/* ---------- Inventaire ---------- */
+
+.statistiques {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 0;
+}
+
+.statistiques div {
+    padding: 1.1rem 1.25rem;
+    background: var(--ombre);
+    border: 1px solid var(--bordure);
+    border-radius: var(--rayon);
+}
+
+.statistiques dt {
+    color: var(--cendre);
+    font-size: 0.9rem;
+}
+
+.statistiques dd {
+    margin: 0.2rem 0 0;
+    color: var(--dorure);
+    font-family: var(--police-titre);
+    font-size: 1.6rem;
+}
+
+.tablette--inventaire {
+    margin-top: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .statistiques {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

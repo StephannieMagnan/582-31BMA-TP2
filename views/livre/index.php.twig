@@ -1,0 +1,81 @@
+{#
+    Catalogue : liste des livres avec recherche et filtres par auteur et par catégorie.
+#}
+{% extends 'layout.php.twig' %}
+{% import 'partials/couverture.php.twig' as illustration %}
+
+{% block titre %}Catalogue{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>Catalogue</h1>
+        <p class="texte-discret">{{ livres|length }} livre{{ livres|length > 1 ? 's' }} affiché{{ livres|length > 1 ? 's' }}</p>
+    </div>
+
+    <form class="filtres" method="get" action="{{ base }}/livres" role="search">
+        <div class="champ">
+            <label for="texte">Titre ou auteur</label>
+            <input type="search" id="texte" name="texte" value="{{ filtres.texte }}">
+        </div>
+
+        <div class="champ">
+            <label for="auteur">Auteur</label>
+            <select id="auteur" name="auteur">
+                <option value="0">Tous les auteurs</option>
+                {% for auteur in auteurs %}
+                    <option value="{{ auteur.id }}" {% if auteur.id == filtres.auteur_id %}selected{% endif %}>
+                        {{ auteur.prenom }} {{ auteur.nom }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="champ">
+            <label for="categorie">Catégorie</label>
+            <select id="categorie" name="categorie">
+                <option value="0">Toutes les catégories</option>
+                {% for categorie in categories %}
+                    <option value="{{ categorie.id }}" {% if categorie.id == filtres.categorie_id %}selected{% endif %}>
+                        {{ categorie.nom }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filtres__actions">
+            <button type="submit" class="bouton">Filtrer</button>
+            {% if filtreActif %}
+                <a href="{{ base }}/livres">Effacer les filtres</a>
+            {% endif %}
+        </div>
+    </form>
+
+    {% if livres is empty %}
+        <div class="vide">
+            <p>{{ filtreActif ? 'Aucun livre ne correspond à ces filtres.' : 'Le catalogue est vide.' }}</p>
+            <a class="bouton" href="{{ base }}/livre/create">Ajouter un livre</a>
+        </div>
+    {% else %}
+        <ul class="rayon">
+            {% for livre in livres %}
+                <li class="rayon__livre">
+                    <a href="{{ base }}/livre/show?id={{ livre.id }}" tabindex="-1">
+                        {{ illustration.couverture(livre) }}
+                    </a>
+                    <div class="rayon__infos">
+                        <a class="rayon__titre" href="{{ base }}/livre/show?id={{ livre.id }}">{{ livre.titre }}</a>
+                        <span class="texte-discret">{{ livre.auteur_nom }}</span>
+                        <span class="rayon__prix">
+                            {{ livre.prix|prix }}
+                            {% if livre.quantite_stock == 0 %}
+                                <span class="pastille pastille--rupture">Épuisé</span>
+                            {% elseif livre.quantite_stock <= seuil_stock %}
+                                <span class="pastille pastille--faible">Stock faible</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

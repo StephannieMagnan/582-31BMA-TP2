@@ -1,0 +1,44 @@
+{#
+    Formulaire d'ajout (categorie/store) et de modification (categorie/update) d'une catégorie.
+#}
+{% extends 'layout.php.twig' %}
+{% import 'partials/formulaire.php.twig' as champ %}
+
+{% set estAjout = categorie.id is empty %}
+
+{% block titre %}{{ estAjout ? 'Ajouter une catégorie' : 'Modifier ' ~ categorie.nom }}{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>{{ estAjout ? 'Ajouter une catégorie' : 'Modifier la catégorie' }}</h1>
+    </div>
+
+    {% if erreurs is not empty %}
+        <p class="message message--erreur" role="alert">La catégorie n'a pas été enregistrée. Corrigez les champs indiqués.</p>
+    {% endif %}
+
+    <form class="formulaire formulaire--etroit" method="post" action="{{ base }}/categorie/{{ estAjout ? 'store' : 'update' }}" novalidate>
+        <input type="hidden" name="jeton_csrf" value="{{ jeton_csrf }}">
+        {% if not estAjout %}
+            <input type="hidden" name="id" value="{{ categorie.id }}">
+        {% endif %}
+
+        <div class="champ">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" name="nom" maxlength="60" required
+                   value="{{ categorie.nom }}"{{ champ.attributs(erreurs, 'nom') }}>
+            {{ champ.erreur(erreurs, 'nom') }}
+        </div>
+
+        <div class="champ">
+            <label for="description">Description <span class="facultatif">(facultatif)</span></label>
+            <textarea id="description" name="description" rows="3" maxlength="255"{{ champ.attributs(erreurs, 'description') }}>{{ categorie.description }}</textarea>
+            {{ champ.erreur(erreurs, 'description') }}
+        </div>
+
+        <div class="formulaire__actions">
+            <button type="submit" class="bouton">{{ estAjout ? 'Ajouter la catégorie' : 'Enregistrer les modifications' }}</button>
+            <a href="{{ base }}/categories">Annuler</a>
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,53 @@
+{#
+    Page d'accueil : vue statique de présentation de la librairie.
+    Aucune donnée ne vient de la base.
+#}
+{% extends 'layout.php.twig' %}
+
+{% block titre %}Accueil{% endblock %}
+
+{% block contenu %}
+    <section class="vitrine">
+        <div class="vitrine__texte">
+            <p class="vitrine__surtitre">Librairie de l'étrange</p>
+            <h1>Nemesis</h1>
+            <p>
+                Classiques gothiques, fantastique et horreur d'ici. Nemesis rassemble les récits
+                qui se lisent à la chandelle, de Mary Shelley à Patrick Senécal.
+            </p>
+            <a class="bouton" href="{{ base }}/livres">Parcourir le catalogue</a>
+        </div>
+
+        <ul class="tablette" aria-hidden="true">
+            <li><div class="couverture" style="--couleur: #5C0F1A;"><span class="couverture__titre">Gothique</span><span class="couverture__auteur">Châteaux et ruines</span></div></li>
+            <li><div class="couverture" style="--couleur: #2E3B2A;"><span class="couverture__titre">Fantastique</span><span class="couverture__auteur">L'étrange au quotidien</span></div></li>
+            <li><div class="couverture" style="--couleur: #1E1A2B;"><span class="couverture__titre">Vampires</span><span class="couverture__auteur">Créatures de la nuit</span></div></li>
+            <li><div class="couverture" style="--couleur: #3B1230;"><span class="couverture__titre">Horreur</span><span class="couverture__auteur">Pour frissonner</span></div></li>
+            <li><div class="couverture" style="--couleur: #4A1942;"><span class="couverture__titre">Poésie</span><span class="couverture__auteur">Spleen et idéal</span></div></li>
+            <li><div class="couverture" style="--couleur: #3A2A1E;"><span class="couverture__titre">Classiques</span><span class="couverture__auteur">Hors du temps</span></div></li>
+        </ul>
+    </section>
+
+    <section class="section">
+        <h2>Gérer la librairie</h2>
+
+        <ul class="portes">
+            <li>
+                <h3><a href="{{ base }}/livres">Le catalogue</a></h3>
+                <p>Cherchez un livre par titre, par auteur ou par catégorie, consultez sa fiche, puis modifiez-le ou retirez-le des rayons.</p>
+            </li>
+            <li>
+                <h3><a href="{{ base }}/auteurs">Les auteurs</a></h3>
+                <p>Chaque livre est lié à un auteur. Un auteur qui a encore des livres au catalogue ne peut pas être supprimé.</p>
+            </li>
+            <li>
+                <h3><a href="{{ base }}/editeurs">Les éditeurs</a></h3>
+                <p>Les maisons d'édition des livres. Si un éditeur disparaît, ses livres restent au catalogue, sans éditeur.</p>
+            </li>
+            <li>
+                <h3><a href="{{ base }}/categories">Les catégories</a></h3>
+                <p>Un livre peut appartenir à plusieurs catégories : horreur, gothique, vampires, poésie et plus encore.</p>
+            </li>
+        </ul>
+    </section>
+{% endblock %}

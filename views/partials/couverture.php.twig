@@ -1,0 +1,17 @@
+{#
+    Couverture illustrée d'un livre, façon grimoire relié de cuir.
+    La teinte est choisie dans la palette selon l'identifiant du livre.
+    Utilisation :
+        {% import 'partials/couverture.php.twig' as illustration %}
+        {{ illustration.couverture(livre) }}
+        {{ illustration.couverture(livre, true) }}   (grande version)
+#}
+{% macro couverture(livre, grande = false) %}
+    {% set teintes = ['#5C0F1A', '#2E3B2A', '#1E1A2B', '#3B1230', '#4A1942', '#7A1E2B', '#3A2A1E'] %}
+    {% set teinte = teintes[(livre.id|default(0)) % teintes|length] %}
+
+    <div class="couverture{{ grande ? ' couverture--grande' }}" style="--couleur: {{ teinte }};" aria-hidden="true">
+        <span class="couverture__titre">{{ livre.titre }}</span>
+        <span class="couverture__auteur">{{ livre.auteur_nom|default('') }}</span>
+    </div>
+{% endmacro %}

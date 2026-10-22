@@ -1,0 +1,52 @@
+{#
+    Formulaire d'ajout (editeur/store) et de modification (editeur/update) d'un éditeur.
+#}
+{% extends 'layout.php.twig' %}
+{% import 'partials/formulaire.php.twig' as champ %}
+
+{% set estAjout = editeur.id is empty %}
+
+{% block titre %}{{ estAjout ? 'Ajouter un éditeur' : 'Modifier ' ~ editeur.nom }}{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>{{ estAjout ? 'Ajouter un éditeur' : 'Modifier l\'éditeur' }}</h1>
+    </div>
+
+    {% if erreurs is not empty %}
+        <p class="message message--erreur" role="alert">L'éditeur n'a pas été enregistré. Corrigez les champs indiqués.</p>
+    {% endif %}
+
+    <form class="formulaire formulaire--etroit" method="post" action="{{ base }}/editeur/{{ estAjout ? 'store' : 'update' }}" novalidate>
+        <input type="hidden" name="jeton_csrf" value="{{ jeton_csrf }}">
+        {% if not estAjout %}
+            <input type="hidden" name="id" value="{{ editeur.id }}">
+        {% endif %}
+
+        <div class="champ">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" name="nom" maxlength="100" required
+                   value="{{ editeur.nom }}"{{ champ.attributs(erreurs, 'nom') }}>
+            {{ champ.erreur(erreurs, 'nom') }}
+        </div>
+
+        <div class="champ">
+            <label for="ville">Ville <span class="facultatif">(facultatif)</span></label>
+            <input type="text" id="ville" name="ville" maxlength="80"
+                   value="{{ editeur.ville }}"{{ champ.attributs(erreurs, 'ville') }}>
+            {{ champ.erreur(erreurs, 'ville') }}
+        </div>
+
+        <div class="champ">
+            <label for="site_web">Site Web <span class="facultatif">(facultatif)</span></label>
+            <input type="url" id="site_web" name="site_web" maxlength="255" placeholder="https://"
+                   value="{{ editeur.site_web }}"{{ champ.attributs(erreurs, 'site_web') }}>
+            {{ champ.erreur(erreurs, 'site_web') }}
+        </div>
+
+        <div class="formulaire__actions">
+            <button type="submit" class="bouton">{{ estAjout ? 'Ajouter l\'éditeur' : 'Enregistrer les modifications' }}</button>
+            <a href="{{ base }}/editeurs">Annuler</a>
+        </div>
+    </form>
+{% endblock %}

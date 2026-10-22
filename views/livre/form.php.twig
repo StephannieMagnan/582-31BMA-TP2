@@ -1,0 +1,134 @@
+{#
+    Formulaire d'ajout (livre/store) et de modification (livre/update) d'un livre.
+    Les listes d'auteurs et d'éditeurs servent aux clés étrangères,
+    les cases à cocher à la table de liaison livre_categorie.
+#}
+{% extends 'layout.php.twig' %}
+{% import 'partials/couverture.php.twig' as illustration %}
+{% import 'partials/formulaire.php.twig' as champ %}
+
+{% set estAjout = livre.id is empty %}
+
+{% block titre %}{{ estAjout ? 'Ajouter un livre' : 'Modifier ' ~ livre.titre }}{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>{{ estAjout ? 'Ajouter un livre' : 'Modifier le livre' }}</h1>
+    </div>
+
+    {% if auteurs is empty %}
+        <div class="vide">
+            <p>Un livre doit être lié à un auteur. Ajoutez d'abord un auteur.</p>
+            <a class="bouton" href="{{ base }}/auteur/create">Ajouter un auteur</a>
+        </div>
+    {% else %}
+        {% if erreurs is not empty %}
+            <p class="message message--erreur" role="alert">Le livre n'a pas été enregistré. Corrigez les champs indiqués.</p>
+        {% endif %}
+
+        <div class="mise-en-page-formulaire">
+            <form class="formulaire" method="post" action="{{ base }}/livre/{{ estAjout ? 'store' : 'update' }}" novalidate>
+                <input type="hidden" name="jeton_csrf" value="{{ jeton_csrf }}">
+                {% if not estAjout %}
+                    <input type="hidden" name="id" value="{{ livre.id }}">
+                {% endif %}
+
+                <div class="champ">
+                    <label for="titre">Titre</label>
+                    <input type="text" id="titre" name="titre" maxlength="150" required
+                           value="{{ livre.titre }}" data-apercu="titre"{{ champ.attributs(erreurs, 'titre') }}>
+                    {{ champ.erreur(erreurs, 'titre') }}
+                </div>
+
+                <div class="rangee">
+                    <div class="champ">
+                        <label for="auteur_id">Auteur</label>
+                        <select id="auteur_id" name="auteur_id" required data-apercu="auteur"{{ champ.attributs(erreurs, 'auteur_id') }}>
+                            <option value="">Choisir un auteur</option>
+                            {% for auteur in auteurs %}
+                                <option value="{{ auteur.id }}" {% if auteur.id == livre.auteur_id %}selected{% endif %}>
+                                    {{ auteur.prenom }} {{ auteur.nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {{ champ.erreur(erreurs, 'auteur_id') }}
+                    </div>
+
+                    <div class="champ">
+                        <label for="editeur_id">Éditeur <span class="facultatif">(facultatif)</span></label>
+                        <select id="editeur_id" name="editeur_id"{{ champ.attributs(erreurs, 'editeur_id') }}>
+                            <option value="">Aucun éditeur</option>
+                            {% for editeur in editeurs %}
+                                <option value="{{ editeur.id }}" {% if editeur.id == livre.editeur_id %}selected{% endif %}>
+                                    {{ editeur.nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {{ champ.erreur(erreurs, 'editeur_id') }}
+                    </div>
+                </div>
+
+                <div class="rangee rangee--trois">
+                    <div class="champ">
+                        <label for="annee_publication">Année <span class="facultatif">(facultatif)</span></label>
+                        <input type="number" id="annee_publication" name="annee_publication" min="1450" max="{{ anneeMax }}"
+                               value="{{ livre.annee_publication }}"{{ champ.attributs(erreurs, 'annee_publication') }}>
+                        {{ champ.erreur(erreurs, 'annee_publication') }}
+                    </div>
+
+                    <div class="champ">
+                        <label for="prix">Prix ($)</label>
+                        <input type="number" id="prix" name="prix" min="0" max="9999.99" step="0.01" required
+                               value="{{ livre.prix }}"{{ champ.attributs(erreurs, 'prix') }}>
+                        {{ champ.erreur(erreurs, 'prix') }}
+                    </div>
+
+                    <div class="champ">
+                        <label for="quantite_stock">En stock</label>
+                        <input type="number" id="quantite_stock" name="quantite_stock" min="0" step="1" required
+                               value="{{ livre.quantite_stock }}"{{ champ.attributs(erreurs, 'quantite_stock') }}>
+                        {{ champ.erreur(erreurs, 'quantite_stock') }}
+                    </div>
+                </div>
+
+                <fieldset class="champ">
+                    <legend>Catégories <span class="facultatif">(facultatif)</span></legend>
+                    {% if categories is empty %}
+                        <p class="texte-discret">Aucune catégorie. <a href="{{ base }}/categorie/create">Ajouter une catégorie</a></p>
+                    {% else %}
+                        <div class="cases">
+                            {% for categorie in categories %}
+                                <label class="case">
+                                    <input type="checkbox" name="categorie_ids[]" value="{{ categorie.id }}"
+                                        {% if categorie.id in livre.categorie_ids|default([]) %}checked{% endif %}>
+                                    {{ categorie.nom }}
+                                </label>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {{ champ.erreur(erreurs, 'categorie_ids') }}
+                </fieldset>
+
+                <div class="champ">
+                    <label for="resume">Résumé <span class="facultatif">(facultatif)</span></label>
+                    <textarea id="resume" name="resume" rows="5" maxlength="5000"{{ champ.attributs(erreurs, 'resume') }}>{{ livre.resume }}</textarea>
+                    {{ champ.erreur(erreurs, 'resume') }}
+                </div>
+
+                <div class="formulaire__actions">
+                    <button type="submit" class="bouton">{{ estAjout ? 'Ajouter le livre' : 'Enregistrer les modifications' }}</button>
+                    <a href="{{ base }}{{ estAjout ? '/livres' : '/livre/show?id=' ~ livre.id }}">Annuler</a>
+                </div>
+            </form>
+
+            <aside class="apercu" aria-label="Aperçu de la couverture">
+                {{ illustration.couverture(livre, true) }}
+                <p class="texte-discret">Aperçu de la couverture</p>
+            </aside>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ base }}/js/apercu-couverture.js"></script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{#
+    Fiche d'un livre : toutes ses informations, avec son auteur,
+    son éditeur et ses catégories (données des tables liées).
+#}
+{% extends 'layout.php.twig' %}
+{% import 'partials/couverture.php.twig' as illustration %}
+
+{% block titre %}{{ livre.titre }}{% endblock %}
+
+{% block contenu %}
+    <p class="fil"><a href="{{ base }}/livres">Catalogue</a> / {{ livre.titre }}</p>
+
+    <article class="fiche">
+        {{ illustration.couverture(livre, true) }}
+
+        <div class="fiche__details">
+            <h1>{{ livre.titre }}</h1>
+            <p class="fiche__auteur">
+                par <a href="{{ base }}/livres?auteur={{ livre.auteur_id }}">{{ livre.auteur_nom }}</a>
+            </p>
+
+            {% if categories is not empty %}
+                <ul class="etiquettes" aria-label="Catégories">
+                    {% for categorie in categories %}
+                        <li><a href="{{ base }}/livres?categorie={{ categorie.id }}">{{ categorie.nom }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if livre.resume is not null %}
+                <p class="fiche__resume">{{ livre.resume|nl2br }}</p>
+            {% endif %}
+
+            <dl class="fiche__donnees">
+                <div>
+                    <dt>Prix</dt>
+                    <dd>{{ livre.prix|prix }}</dd>
+                </div>
+                <div>
+                    <dt>En stock</dt>
+                    <dd>
+                        {{ livre.quantite_stock }} exemplaire{{ livre.quantite_stock > 1 ? 's' }}
+                        {% if livre.quantite_stock <= seuil_stock %}
+                            <span class="pastille {{ livre.quantite_stock == 0 ? 'pastille--rupture' : 'pastille--faible' }}">
+                                {{ livre.quantite_stock == 0 ? 'Épuisé' : 'Stock faible' }}
+                            </span>
+                        {% endif %}
+                    </dd>
+                </div>
+                <div>
+                    <dt>Éditeur</dt>
+                    <dd>
+                        {% if livre.editeur_nom is not null %}
+                            {{ livre.editeur_nom }}{% if livre.editeur_ville %}, {{ livre.editeur_ville }}{% endif %}
+                        {% else %}
+                            Non précisé
+                        {% endif %}
+                    </dd>
+                </div>
+                <div>
+                    <dt>Publication</dt>
+                    <dd>{{ livre.annee_publication ?? 'Non précisée' }}</dd>
+                </div>
+            </dl>
+
+            {% if livre.auteur_biographie is not null %}
+                <section class="fiche__bio">
+                    <h2>À propos de {{ livre.auteur_nom }}</h2>
+                    <p>{{ livre.auteur_biographie }}</p>
+                </section>
+            {% endif %}
+
+            <div class="fiche__actions">
+                <a class="bouton" href="{{ base }}/livre/edit?id={{ livre.id }}">Modifier le livre</a>
+                {% include 'partials/supprimer.php.twig' with {
+                    action: '/livre/delete',
+                    id: livre.id,
+                    confirmation: 'Supprimer « ' ~ livre.titre ~ ' » du catalogue?'
+                } %}
+            </div>
+        </div>
+    </article>
+{% endblock %}

@@ -1,0 +1,56 @@
+{#
+    Liste des éditeurs, avec le nombre de livres publiés.
+#}
+{% extends 'layout.php.twig' %}
+
+{% block titre %}Éditeurs{% endblock %}
+
+{% block contenu %}
+    <div class="en-tete-page">
+        <h1>Éditeurs</h1>
+        <a class="bouton" href="{{ base }}/editeur/create">Ajouter un éditeur</a>
+    </div>
+
+    {% if editeurs is empty %}
+        <div class="vide">
+            <p>Aucun éditeur pour l'instant.</p>
+            <a class="bouton" href="{{ base }}/editeur/create">Ajouter un éditeur</a>
+        </div>
+    {% else %}
+        <div class="tableau-conteneur">
+            <table class="tableau">
+                <thead>
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Ville</th>
+                        <th scope="col">Site Web</th>
+                        <th scope="col" class="nombre">Livres</th>
+                        <th scope="col"><span class="visuellement-cache">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for editeur in editeurs %}
+                        <tr>
+                            <td><strong>{{ editeur.nom }}</strong></td>
+                            <td>{{ editeur.ville }}</td>
+                            <td>
+                                {% if editeur.site_web is not null %}
+                                    <a href="{{ editeur.site_web }}" target="_blank" rel="noopener">Visiter le site</a>
+                                {% endif %}
+                            </td>
+                            <td class="nombre">{{ editeur.nombre_livres }}</td>
+                            <td class="actions">
+                                <a href="{{ base }}/editeur/edit?id={{ editeur.id }}">Modifier</a>
+                                {% include 'partials/supprimer.php.twig' with {
+                                    action: '/editeur/delete',
+                                    id: editeur.id,
+                                    confirmation: 'Supprimer ' ~ editeur.nom ~ '? Ses livres resteront au catalogue, sans éditeur.'
+                                } %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

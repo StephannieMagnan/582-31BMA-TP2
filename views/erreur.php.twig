@@ -1,0 +1,19 @@
+{#
+    Page d'erreur : page introuvable (404) ou erreur inattendue (500).
+#}
+{% extends 'layout.php.twig' %}
+
+{% block titre %}Erreur{% endblock %}
+
+{% block contenu %}
+    <section class="vide">
+        <h1>{{ titre }}</h1>
+        <p>{{ message }}</p>
+
+        {% if detail is defined and detail is not null %}
+            <pre class="detail-erreur">{{ detail }}</pre>
+        {% endif %}
+
+        <a class="bouton" href="{{ base }}/">Retour à l'accueil</a>
+    </section>
+{% endblock %}

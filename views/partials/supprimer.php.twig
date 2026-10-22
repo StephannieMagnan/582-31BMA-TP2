@@ -1,0 +1,10 @@
+{#
+    Petit formulaire POST pour supprimer un enregistrement.
+    Une confirmation est demandée avant l'envoi (js/confirmation.js).
+    Variables attendues : action, id, confirmation
+#}
+<form class="form-suppression" method="post" action="{{ base }}{{ action }}" data-confirmation="{{ confirmation }}">
+    <input type="hidden" name="jeton_csrf" value="{{ jeton_csrf }}">
+    <input type="hidden" name="id" value="{{ id }}">
+    <button type="submit" class="bouton-lien bouton-lien--danger">Supprimer</button>
+</form>

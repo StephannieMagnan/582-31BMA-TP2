@@ -1,0 +1,14 @@
+{
+    "name": "stephanniemagnan/nemesis",
+    "description": "Librairie Nemesis : TP2, migration vers l'architecture MVC (582-31VB-MA)",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "twig/twig": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "./"
+        }
+    }
+}
